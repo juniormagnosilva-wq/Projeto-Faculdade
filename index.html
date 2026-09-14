@@ -24,6 +24,8 @@
       --color-success-text: #065F46;
       --color-error-bg: #FEE2E2;
       --color-error-text: #991B1B;
+      --color-info-bg: #DBEAFE;
+      --color-info-text: #1E40AF;
 
       /* Escala Tipográfica (5 Patamares Hierárquicos) */
       --font-size-h1: 2.25rem;    /* 36px - Título Principal */
@@ -92,7 +94,6 @@
       gap: var(--space-sm);
     }
 
-    /* Estados Interativos da Navegação */
     nav a {
       color: var(--color-neutral-white);
       text-decoration: none;
@@ -102,9 +103,10 @@
       border-radius: 6px;
       border: 2px solid transparent;
       transition: var(--transition-fast);
+      cursor: pointer;
     }
 
-    nav a:hover {
+    nav a:hover, nav a.active {
       background-color: var(--color-primary-hover);
       transform: translateY(-2px);
     }
@@ -112,10 +114,6 @@
     nav a:focus-visible {
       outline: 3px solid var(--color-secondary);
       outline-offset: 2px;
-    }
-
-    nav a:active {
-      transform: translateY(0);
     }
 
     /* ==========================================================================
@@ -132,14 +130,18 @@
       gap: var(--space-md);
     }
 
-    /* Distribuição das Seções nas Colunas */
-    #apresentacao {
-      grid-column: span 8;
+    #app {
+      grid-column: span 12;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--space-md);
+      width: 100%;
     }
 
-    #contato {
-      grid-column: span 4;
-    }
+    .col-8 { grid-column: span 8; }
+    .col-6 { grid-column: span 6; }
+    .col-4 { grid-column: span 4; }
+    .col-12 { grid-column: span 12; }
 
     section {
       background: var(--color-neutral-white);
@@ -189,9 +191,8 @@
     }
 
     /* ==========================================================================
-       4. COMPONENTES DE FEEDBACK E FORMULÁRIOS
+       4. COMPONENTES DE FEEDBACK, FORMULÁRIOS E ESTADOS INTERATIVOS
        ========================================================================== */
-    /* Badges */
     .badge {
       display: inline-block;
       padding: 0.25rem 0.75rem;
@@ -202,12 +203,9 @@
       width: fit-content;
     }
 
-    .badge-success {
-      background-color: var(--color-success-bg);
-      color: var(--color-success-text);
-    }
+    .badge-success { background-color: var(--color-success-bg); color: var(--color-success-text); }
+    .badge-info { background-color: var(--color-info-bg); color: var(--color-info-text); }
 
-    /* Alertas */
     .alert {
       padding: var(--space-sm);
       border-radius: 6px;
@@ -222,7 +220,6 @@
       border-color: var(--color-secondary);
     }
 
-    /* Formulário e Validações Visualmente Indicadas */
     .form-group {
       display: flex;
       flex-direction: column;
@@ -250,9 +247,23 @@
       box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.2);
     }
 
-    /* Feedback de Erro/Sucesso no Campo */
-    .form-control:valid {
+    /* Feedback de Erro e Sucesso via JavaScript */
+    .form-control.is-valid {
       border-color: var(--color-secondary);
+      background-color: rgba(209, 250, 229, 0.1);
+    }
+
+    .form-control.is-invalid {
+      border-color: #DC2626;
+      background-color: rgba(254, 226, 226, 0.1);
+    }
+
+    .error-message {
+      color: #DC2626;
+      font-size: 0.85rem;
+      margin-top: -0.25rem;
+      margin-bottom: 0.5rem;
+      display: block;
     }
 
     .btn {
@@ -266,20 +277,50 @@
       cursor: pointer;
       transition: var(--transition-fast);
       align-self: flex-start;
+      text-decoration: none;
+      display: inline-block;
     }
 
-    .btn:hover {
-      background-color: var(--color-primary-hover);
+    .btn:hover { background-color: var(--color-primary-hover); box-shadow: var(--shadow-md); }
+    .btn:active { transform: scale(0.98); }
+    .btn:focus-visible { outline: 3px solid var(--color-secondary); outline-offset: 2px; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .btn-secondary { background-color: var(--color-secondary); }
+    .btn-secondary:hover { background-color: var(--color-secondary-hover); }
+
+    /* Notificação Toast */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: var(--color-neutral-dark);
+      color: var(--color-neutral-white);
+      padding: 0.85rem 1.25rem;
+      border-radius: 6px;
       box-shadow: var(--shadow-md);
+      z-index: 1000;
+      transition: var(--transition-normal);
     }
 
-    .btn:active {
-      transform: scale(0.98);
+    /* Grid para formulário de cadastro em 2 colunas */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--space-md);
     }
 
-    .btn:focus-visible {
-      outline: 3px solid var(--color-secondary);
-      outline-offset: 2px;
+    fieldset {
+      border: 2px solid var(--color-neutral-light);
+      padding: var(--space-md);
+      border-radius: 8px;
+    }
+
+    legend {
+      font-size: var(--font-size-h3);
+      font-weight: 700;
+      color: var(--color-primary);
+      padding: 0 var(--space-xs);
     }
 
     /* ==========================================================================
@@ -295,68 +336,34 @@
     }
 
     /* ==========================================================================
-       6. ADAPTABILIDADE E RESPONSIVIDADE (5 BREAKPOINTS)
+       6. RESPONSIVIDADE (5 BREAKPOINTS)
        ========================================================================== */
-
-    /* Breakpoint 1: Extra Small (< 480px) */
     @media (max-width: 479px) {
-      main {
-        grid-template-columns: repeat(4, 1fr);
-        gap: var(--space-xs);
-      }
-      #apresentacao, #contato {
-        grid-column: span 4;
-      }
-      header h1 {
-        font-size: var(--font-size-h2);
-      }
-      nav ul {
-        flex-direction: column;
-        width: 100%;
-      }
+      main, #app { grid-template-columns: repeat(4, 1fr); gap: var(--space-xs); }
+      .col-8, .col-6, .col-4, .col-12 { grid-column: span 4; }
+      nav ul { flex-direction: column; width: 100%; }
     }
 
-    /* Breakpoint 2: Mobile (480px - 767px) */
     @media (min-width: 480px) and (max-width: 767px) {
-      main {
-        grid-template-columns: repeat(4, 1fr);
-        gap: var(--space-sm);
-      }
-      #apresentacao, #contato {
-        grid-column: span 4;
-      }
+      main, #app { grid-template-columns: repeat(4, 1fr); gap: var(--space-sm); }
+      .col-8, .col-6, .col-4, .col-12 { grid-column: span 4; }
     }
 
-    /* Breakpoint 3: Tablet (768px - 1023px) */
     @media (min-width: 768px) and (max-width: 1023px) {
-      main {
-        grid-template-columns: repeat(8, 1fr);
-        gap: var(--space-md);
-      }
-      #apresentacao, #contato {
-        grid-column: span 8;
-      }
+      main, #app { grid-template-columns: repeat(8, 1fr); gap: var(--space-md); }
+      .col-8, .col-6, .col-4, .col-12 { grid-column: span 8; }
     }
 
-    /* Breakpoint 4: Desktop Padrão (1024px - 1439px) */
     @media (min-width: 1024px) and (max-width: 1439px) {
-      main {
-        grid-template-columns: repeat(12, 1fr);
-      }
-      #apresentacao {
-        grid-column: span 8;
-      }
-      #contato {
-        grid-column: span 4;
-      }
+      main, #app { grid-template-columns: repeat(12, 1fr); }
+      .col-8 { grid-column: span 8; }
+      .col-6 { grid-column: span 6; }
+      .col-4 { grid-column: span 4; }
+      .col-12 { grid-column: span 12; }
     }
 
-    /* Breakpoint 5: Ultra-Wide (>= 1440px) */
     @media (min-width: 1440px) {
-      main {
-        max-width: 1400px;
-        gap: var(--space-lg);
-      }
+      main { max-width: 1400px; gap: var(--space-lg); }
     }
   </style>
 </head>
@@ -367,54 +374,18 @@
     <h1>ONG Esperança</h1>
     <nav>
       <ul>
-        <li><a href="index.html">Início</a></li>
-        <li><a href="projetos.html">Projetos</a></li>
-        <li><a href="cadastro.html">Cadastro</a></li>
+        <li><a data-route="inicio" class="active">Início</a></li>
+        <li><a data-route="projetos">Projetos</a></li>
+        <li><a data-route="cadastro">Cadastro</a></li>
       </ul>
     </nav>
   </header>
 
-  <!-- CONTEÚDO PRINCIPAL (GRID 12 COLUNAS) -->
+  <!-- CONTEÚDO PRINCIPAL (CONTAINER DINÂMICO SPA) -->
   <main>
-    
-    <!-- SEÇÃO SOBRE A ORGANIZAÇÃO -->
-    <section id="apresentacao">
-      <div>
-        <span class="badge badge-success">Projeto Ativo</span>
-        <h2>Sobre a Nossa Organização</h2>
-        <p>Trabalhamos promovendo a inclusão social e o desenvolvimento comunitário através de ações humanitárias e educação inclusiva.</p>
-        
-        <h3>Nossa Missão</h3>
-        <p>Garantir oportunidades e dignidade para famílias em situação de vulnerabilidade social.</p>
-      </div>
-      
-      <img src="assets/images/logo.png" alt="Voluntários da ONG reunidos trabalhando em projeto comunitário">
-    </section>
-
-    <!-- SEÇÃO DE CONTATO E FORMULÁRIO -->
-    <section id="contato">
-      <div>
-        <h2>Contato</h2>
-        
-        <!-- Alerta Semântico -->
-        <div class="alert alert-success">
-          Atendimento presencial de segunda a sexta, das 8h às 17h.
-        </div>
-
-        <p><strong>E-mail:</strong> contato@ongesperanca.org.br</p>
-        <p><strong>Telefone:</strong> (11) 99999-9999</p>
-
-        <h3>Inscreva-se na nossa Newsletter</h3>
-        <form action="#" method="POST" onsubmit="event.preventDefault();">
-          <div class="form-group">
-            <label for="email">Seu E-mail:</label>
-            <input type="email" id="email" class="form-control" placeholder="seuemail@exemplo.com" required>
-          </div>
-          <button type="submit" class="btn">Cadastrar</button>
-        </form>
-      </div>
-    </section>
-
+    <div id="app">
+      <!-- O conteúdo será injetado dinamicamente via JavaScript -->
+    </div>
   </main>
 
   <!-- RODAPÉ -->
@@ -422,5 +393,273 @@
     <p>&copy; 2026 ONG Esperança - Todos os direitos reservados.</p>
   </footer>
 
+  <!-- BIBLIOTECA EXTERNA IMASK (MÁSCARAS DE INPUT) -->
+  <script src="https://unpkg.com/imask"></script>
+
+  <!-- LÓGICA JAVASCRIPT REATIVA E MODULAR -->
+  <script>
+    /* ==========================================================================
+       PERSISTÊNCIA E DADOS (LOCALSTORAGE)
+       ========================================================================== */
+    const STORAGE_KEY = 'ong_cadastros_voluntarios';
+
+    function salvarCadastro(dados) {
+      const cadastros = carregarCadastros();
+      cadastros.push(dados);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(cadastros));
+    }
+
+    function carregarCadastros() {
+      const dados = localStorage.getItem(STORAGE_KEY);
+      try {
+        return dados ? JSON.parse(dados) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    /* ==========================================================================
+       ROTAS E TEMPLATES DA SPA
+       ========================================================================== */
+    const routes = {
+      inicio: `
+        <section id="apresentacao" class="col-8">
+          <div>
+            <span class="badge badge-success">Projeto Ativo</span>
+            <h2>Sobre a Nossa Organização</h2>
+            <p>Trabalhamos promovendo a inclusão social e o desenvolvimento comunitário através de ações humanitárias e educação inclusiva.</p>
+            <h3>Nossa Missão</h3>
+            <p>Garantir oportunidades e dignidade para famílias em situação de vulnerabilidade social.</p>
+          </div>
+          <img src="assets/images/logo.png" alt="Voluntários da ONG reunidos">
+        </section>
+
+        <section id="contato" class="col-4">
+          <div>
+            <h2>Contato</h2>
+            <div class="alert alert-success">
+              Atendimento presencial de segunda a sexta, das 8h às 17h.
+            </div>
+            <p><strong>E-mail:</strong> contato@ongesperanca.org.br</p>
+            <p><strong>Telefone:</strong> (11) 99999-9999</p>
+
+            <h3>Inscreva-se na nossa Newsletter</h3>
+            <form id="form-newsletter">
+              <div class="form-group">
+                <label for="email-news">Seu E-mail:</label>
+                <input type="email" id="email-news" class="form-control" placeholder="seuemail@exemplo.com" required>
+              </div>
+              <button type="submit" class="btn">Cadastrar</button>
+            </form>
+          </div>
+        </section>
+      `,
+      projetos: `
+        <section id="doacao" class="col-6">
+          <div>
+            <span class="badge badge-success">Impacto Imediato</span>
+            <h2>Apoie com uma Doação</h2>
+            <p>Sua contribuição financeira mantém nossos projetos ativos e transforma vidas diretamente em nossa comunidade.</p>
+          </div>
+          <a class="btn" onclick="mostrarToast('Redirecionando para plataforma de pagamento...')">Fazer Doação</a>
+        </section>
+
+        <section id="voluntariado" class="col-6">
+          <div>
+            <span class="badge badge-info">Engajamento Social</span>
+            <h2>Seja um Voluntário</h2>
+            <p>Doe seu tempo e habilidades para impactar nossa comunidade nas seguintes frentes:</p>
+            <ul style="margin-bottom: 1rem; padding-left: 1.2rem;">
+              <li>Apoio pedagógico e reforço escolar</li>
+              <li>Organização de eventos comunitários</li>
+              <li>Atendimento e triagem comunitária</li>
+            </ul>
+          </div>
+          <a data-route="cadastro" class="btn btn-secondary nav-link">Inscreva-se como Voluntário</a>
+        </section>
+      `,
+      cadastro: `
+        <section class="col-12">
+          <h2>Faça seu Cadastro</h2>
+          <form id="form-cadastro" class="form-grid">
+            <fieldset class="col-6">
+              <legend>Dados Pessoais</legend>
+              <div class="form-group">
+                <label for="nome">Nome Completo:</label>
+                <input type="text" id="nome" name="nome" class="form-control" placeholder="Digite seu nome completo" required>
+              </div>
+              <div class="form-group">
+                <label for="email">E-mail:</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="seuemail@exemplo.com" required>
+              </div>
+              <div class="form-group">
+                <label for="cpf">CPF:</label>
+                <input type="text" id="cpf" name="cpf" class="form-control" placeholder="000.000.000-00" required>
+              </div>
+              <div class="form-group">
+                <label for="telefone">Telefone:</label>
+                <input type="tel" id="telefone" name="telefone" class="form-control" placeholder="(11) 99999-9999" required>
+              </div>
+            </fieldset>
+
+            <fieldset class="col-6">
+              <legend>Endereço</legend>
+              <div class="form-group">
+                <label for="cep">CEP:</label>
+                <input type="text" id="cep" name="cep" class="form-control" placeholder="00000-000" required>
+              </div>
+              <div class="form-group">
+                <label for="endereco">Endereço:</label>
+                <input type="text" id="endereco" name="endereco" class="form-control" placeholder="Rua, Número, Bairro" required>
+              </div>
+              <div class="form-group">
+                <label for="cidade">Cidade / Estado:</label>
+                <input type="text" id="cidade" name="cidade" class="form-control" placeholder="São Paulo / SP" required>
+              </div>
+            </fieldset>
+
+            <button type="submit" class="btn col-12" style="margin-top: 1rem;">Enviar Cadastro</button>
+          </form>
+        </section>
+      `
+    };
+
+    /* ==========================================================================
+       ROTEAMENTO E RENDERIZAÇÃO SPA
+       ========================================================================== */
+    function navigateTo(route) {
+      const container = document.getElementById('app');
+      if (!container) return;
+
+      container.innerHTML = routes[route] || routes['inicio'];
+
+      // Atualiza estado ativo no menu
+      document.querySelectorAll('nav a').forEach(a => {
+        a.classList.toggle('active', a.getAttribute('data-route') === route);
+      });
+
+      // Aplica máscaras se for a página de cadastro
+      if (route === 'cadastro') {
+        aplicarMascaras();
+      }
+    }
+
+    /* ==========================================================================
+       VALIDAÇÃO DE FORMULÁRIOS E FEEDBACK VISUAL
+       ========================================================================== */
+    const REGEX_PATTERNS = {
+      cpf: /^\d{3}\.\d{3}\.\d{3}-\d{2}$/,
+      telefone: /^\(\d{2}\)\s?\d{4,5}-\d{4}$/,
+      email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      cep: /^\d{5}-\d{3}$/
+    };
+
+    function validarCampo(input) {
+      const container = input.parentElement;
+      let mensagemErro = '';
+      let isValid = true;
+
+      if (input.hasAttribute('required') && !input.value.trim()) {
+        isValid = false;
+        mensagemErro = 'Este campo é obrigatório.';
+      } else if (input.id in REGEX_PATTERNS && input.value.trim() !== '') {
+        if (!REGEX_PATTERNS[input.id].test(input.value.trim())) {
+          isValid = false;
+          mensagemErro = 'Formato inválido inserido.';
+        }
+      }
+
+      // Atualiza classes visuais
+      input.classList.toggle('is-valid', isValid);
+      input.classList.toggle('is-invalid', !isValid);
+
+      // Injeta/Remove mensagem de erro no DOM
+      const erroExistente = container.querySelector('.error-message');
+      if (erroExistente) erroExistente.remove();
+
+      if (!isValid) {
+        const span = document.createElement('span');
+        span.className = 'error-message';
+        span.textContent = mensagemErro;
+        container.appendChild(span);
+      }
+
+      return isValid;
+    }
+
+    function mostrarToast(mensagem) {
+      const toastExistente = document.querySelector('.toast');
+      if (toastExistente) toastExistente.remove();
+
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = mensagem;
+      document.body.appendChild(toast);
+
+      setTimeout(() => toast.remove(), 3500);
+    }
+
+    function aplicarMascaras() {
+      if (typeof IMask === 'undefined') return;
+      const cpf = document.getElementById('cpf');
+      const tel = document.getElementById('telefone');
+      const cep = document.getElementById('cep');
+
+      if (cpf) IMask(cpf, { mask: '000.000.000-00' });
+      if (tel) IMask(tel, { mask: [{ mask: '(00) 0000-0000' }, { mask: '(00) 00000-0000' }] });
+      if (cep) IMask(cep, { mask: '00000-000' });
+    }
+
+    /* ==========================================================================
+       DELEGAÇÃO DE EVENTOS (EVENT DELEGATION)
+       ========================================================================== */
+    document.addEventListener('click', (e) => {
+      const link = e.target.closest('[data-route]');
+      if (link) {
+        e.preventDefault();
+        const route = link.getAttribute('data-route');
+        navigateTo(route);
+      }
+    });
+
+    document.addEventListener('input', (e) => {
+      if (e.target.classList.contains('form-control')) {
+        validarCampo(e.target);
+      }
+    });
+
+    document.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      if (e.target.id === 'form-cadastro') {
+        const inputs = e.target.querySelectorAll('.form-control');
+        let formValido = true;
+
+        inputs.forEach(input => {
+          if (!validarCampo(input)) formValido = false;
+        });
+
+        if (formValido) {
+          const formData = new FormData(e.target);
+          salvarCadastro(Object.fromEntries(formData.entries()));
+          mostrarToast('Cadastro realizado e salvo com sucesso!');
+          e.target.reset();
+          inputs.forEach(i => i.classList.remove('is-valid'));
+        } else {
+          mostrarToast('Por favor, corrija os erros no formulário.');
+        }
+      }
+
+      if (e.target.id === 'form-newsletter') {
+        mostrarToast('E-mail cadastrado na newsletter com sucesso!');
+        e.target.reset();
+      }
+    });
+
+    // Inicializa a SPA na rota inicial
+    document.addEventListener('DOMContentLoaded', () => {
+      navigateTo('inicio');
+    });
+  </script>
 </body>
 </html>

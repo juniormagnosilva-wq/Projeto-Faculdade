@@ -21,16 +21,18 @@
 
       /* Cores Semânticas de Feedback */
       --color-success-bg: #D1FAE5;
-      --color-success-border: #10B981;
+      --color-success-text: #065F46;
       --color-error-bg: #FEE2E2;
-      --color-error-border: #EF4444;
+      --color-error-text: #991B1B;
+      --color-info-bg: #DBEAFE;
+      --color-info-text: #1E40AF;
 
       /* Escala Tipográfica (5 Patamares Hierárquicos) */
       --font-size-h1: 2.25rem;    /* 36px - Título Principal */
       --font-size-h2: 1.75rem;    /* 28px - Títulos de Seções */
-      --font-size-h3: 1.25rem;    /* 20px - Subtítulos e Legends */
-      --font-size-body: 1rem;     /* 16px - Corpo de Texto e Inputs */
-      --font-size-small: 0.875rem;/* 14px - Labels e Rodapé */
+      --font-size-h3: 1.25rem;    /* 20px - Subtítulos */
+      --font-size-body: 1rem;     /* 16px - Corpo de Texto */
+      --font-size-small: 0.875rem;/* 14px - Legendas e Rodapé */
 
       /* Espaçamento Modular (Base 8px) */
       --space-xs: 0.5rem;  /* 8px */
@@ -92,7 +94,6 @@
       gap: var(--space-sm);
     }
 
-    /* Estados Interativos da Navegação */
     nav a {
       color: var(--color-neutral-white);
       text-decoration: none;
@@ -102,9 +103,10 @@
       border-radius: 6px;
       border: 2px solid transparent;
       transition: var(--transition-fast);
+      cursor: pointer;
     }
 
-    nav a:hover {
+    nav a:hover, nav a.active {
       background-color: var(--color-primary-hover);
       transform: translateY(-2px);
     }
@@ -112,10 +114,6 @@
     nav a:focus-visible {
       outline: 3px solid var(--color-secondary);
       outline-offset: 2px;
-    }
-
-    nav a:active {
-      transform: translateY(0);
     }
 
     /* ==========================================================================
@@ -132,36 +130,203 @@
       gap: var(--space-md);
     }
 
-    form {
+    #app {
       grid-column: span 12;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--space-md);
+      width: 100%;
+    }
+
+    .col-8 { grid-column: span 8; }
+    .col-6 { grid-column: span 6; }
+    .col-4 { grid-column: span 4; }
+    .col-12 { grid-column: span 12; }
+
+    section {
       background: var(--color-neutral-white);
       padding: var(--space-lg);
       border-radius: 12px;
       box-shadow: var(--shadow-sm);
       border: 1px solid rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
       transition: var(--transition-normal);
+    }
 
-      /* Grid interno para dispor os Fieldsets lado a lado */
+    section:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    section h2 {
+      color: var(--color-primary);
+      font-size: var(--font-size-h2);
+      margin-bottom: var(--space-sm);
+      border-bottom: 3px solid var(--color-secondary);
+      padding-bottom: var(--space-xs);
+    }
+
+    section h3 {
+      font-size: var(--font-size-h3);
+      color: var(--color-neutral-dark);
+      margin-top: var(--space-sm);
+      margin-bottom: var(--space-xs);
+    }
+
+    section p {
+      color: var(--color-neutral-medium);
+      font-size: var(--font-size-body);
+      margin-bottom: var(--space-sm);
+    }
+
+    section ul {
+      margin-bottom: var(--space-md);
+      padding-left: var(--space-md);
+      list-style-type: square;
+    }
+
+    section ul li {
+      margin-bottom: var(--space-xs);
+      color: var(--color-neutral-dark);
+      font-size: var(--font-size-body);
+    }
+
+    section img {
+      width: 100%;
+      max-width: 220px;
+      height: auto;
+      display: block;
+      margin: var(--space-md) auto 0 auto;
+      border-radius: 8px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* ==========================================================================
+       4. COMPONENTES DE FEEDBACK, FORMULÁRIOS E ESTADOS INTERATIVOS
+       ========================================================================== */
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      font-size: var(--font-size-small);
+      font-weight: 700;
+      border-radius: 50px;
+      margin-bottom: var(--space-xs);
+      width: fit-content;
+    }
+
+    .badge-success { background-color: var(--color-success-bg); color: var(--color-success-text); }
+    .badge-info { background-color: var(--color-info-bg); color: var(--color-info-text); }
+
+    .alert {
+      padding: var(--space-sm);
+      border-radius: 6px;
+      font-size: var(--font-size-small);
+      margin-bottom: var(--space-sm);
+      border-left: 4px solid;
+    }
+
+    .alert-success {
+      background-color: var(--color-success-bg);
+      color: var(--color-success-text);
+      border-color: var(--color-secondary);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      margin-bottom: var(--space-sm);
+    }
+
+    .form-group label {
+      font-size: var(--font-size-small);
+      font-weight: 600;
+      color: var(--color-neutral-dark);
+    }
+
+    .form-control {
+      padding: 0.65rem;
+      border: 2px solid var(--color-neutral-medium);
+      border-radius: 6px;
+      font-size: var(--font-size-body);
+      outline: none;
+      transition: var(--transition-fast);
+    }
+
+    .form-control:focus {
+      border-color: var(--color-primary-hover);
+      box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.2);
+    }
+
+    /* Feedback de Erro e Sucesso via JavaScript */
+    .form-control.is-valid {
+      border-color: var(--color-secondary);
+      background-color: rgba(209, 250, 229, 0.1);
+    }
+
+    .form-control.is-invalid {
+      border-color: #DC2626;
+      background-color: rgba(254, 226, 226, 0.1);
+    }
+
+    .error-message {
+      color: #DC2626;
+      font-size: 0.85rem;
+      margin-top: -0.25rem;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .btn, section a.btn-action {
+      background-color: var(--color-primary);
+      color: var(--color-neutral-white);
+      padding: 0.75rem 1.25rem;
+      font-size: var(--font-size-body);
+      font-weight: 700;
+      border: 2px solid transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      align-self: flex-start;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: auto;
+    }
+
+    .btn:hover, section a.btn-action:hover { 
+      background-color: var(--color-primary-hover); 
+      box-shadow: var(--shadow-md); 
+      transform: translateY(-2px);
+    }
+    .btn:active, section a.btn-action:active { transform: scale(0.98); }
+    .btn:focus-visible, section a.btn-action:focus-visible { outline: 3px solid var(--color-secondary); outline-offset: 2px; }
+
+    .btn-secondary, section a.btn-secondary { background-color: var(--color-secondary); }
+    .btn-secondary:hover, section a.btn-secondary:hover { background-color: var(--color-secondary-hover); }
+
+    /* Notificação Toast */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: var(--color-neutral-dark);
+      color: var(--color-neutral-white);
+      padding: 0.85rem 1.25rem;
+      border-radius: 6px;
+      box-shadow: var(--shadow-md);
+      z-index: 1000;
+      transition: var(--transition-normal);
+    }
+
+    /* Grid do Formulário de Cadastro em 2 colunas */
+    .form-grid {
       display: grid;
       grid-template-columns: repeat(12, 1fr);
       gap: var(--space-md);
     }
 
-    form:hover {
-      box-shadow: var(--shadow-md);
-    }
-
-    /* Fieldset de Dados Pessoais (Coluna da Esquerda) */
-    .fieldset-pessoais {
-      grid-column: span 6;
-      border: 2px solid var(--color-neutral-light);
-      padding: var(--space-md);
-      border-radius: 8px;
-    }
-
-    /* Fieldset de Endereço (Coluna da Direita) */
-    .fieldset-endereco {
-      grid-column: span 6;
+    fieldset {
       border: 2px solid var(--color-neutral-light);
       padding: var(--space-md);
       border-radius: 8px;
@@ -172,87 +337,6 @@
       font-weight: 700;
       color: var(--color-primary);
       padding: 0 var(--space-xs);
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: var(--space-xs);
-    }
-
-    label {
-      margin-top: var(--space-xs);
-      margin-bottom: var(--space-xs);
-      font-size: var(--font-size-small);
-      font-weight: 600;
-      color: var(--color-neutral-dark);
-    }
-
-    /* ==========================================================================
-       4. ESTADOS INTERATIVOS E VALIDAÇÃO DOS INPUTS E BOTÃO
-       ========================================================================== */
-    input[type="text"],
-    input[type="email"],
-    input[type="tel"],
-    input[type="date"] {
-      width: 100%;
-      padding: 0.75rem;
-      border: 2px solid var(--color-neutral-medium);
-      border-radius: 6px;
-      font-size: var(--font-size-body);
-      color: var(--color-neutral-dark);
-      background-color: var(--color-neutral-white);
-      outline: none;
-      transition: var(--transition-fast);
-    }
-
-    /* Foco no Campo */
-    input:focus {
-      border-color: var(--color-primary-hover);
-      box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.2);
-    }
-
-    /* Validação Visual de Sucesso */
-    input:valid:not(:placeholder-shown) {
-      border-color: var(--color-success-border);
-      background-color: rgba(209, 250, 229, 0.1);
-    }
-
-    /* Validação Visual de Erro */
-    input:invalid:not(:placeholder-shown) {
-      border-color: var(--color-error-border);
-      background-color: rgba(254, 226, 226, 0.1);
-    }
-
-    /* Botão de Envio (Ocupa as 12 Colunas na Base) */
-    button[type="submit"] {
-      grid-column: span 12;
-      display: block;
-      width: 100%;
-      background-color: var(--color-primary);
-      color: var(--color-neutral-white);
-      border: 2px solid transparent;
-      padding: 0.85rem;
-      border-radius: 6px;
-      font-size: var(--font-size-body);
-      font-weight: 700;
-      cursor: pointer;
-      transition: var(--transition-fast);
-      margin-top: var(--space-sm);
-    }
-
-    button[type="submit"]:hover {
-      background-color: var(--color-primary-hover);
-      box-shadow: var(--shadow-md);
-    }
-
-    button[type="submit"]:focus-visible {
-      outline: 3px solid var(--color-secondary);
-      outline-offset: 2px;
-    }
-
-    button[type="submit"]:active {
-      transform: scale(0.99);
     }
 
     /* ==========================================================================
@@ -268,90 +352,34 @@
     }
 
     /* ==========================================================================
-       6. ADAPTABILIDADE E RESPONSIVIDADE (5 BREAKPOINTS)
+       6. RESPONSIVIDADE (5 BREAKPOINTS)
        ========================================================================== */
-
-    /* Breakpoint 1: Extra Small (< 480px) */
     @media (max-width: 479px) {
-      main {
-        grid-template-columns: repeat(4, 1fr);
-        gap: var(--space-xs);
-      }
-      form {
-        grid-column: span 4;
-        padding: var(--space-sm);
-        display: flex;
-        flex-direction: column;
-      }
-      .fieldset-pessoais, .fieldset-endereco {
-        grid-column: span 4;
-      }
-      header h1 {
-        font-size: var(--font-size-h2);
-      }
-      nav ul {
-        flex-direction: column;
-        width: 100%;
-      }
+      main, #app { grid-template-columns: repeat(4, 1fr); gap: var(--space-xs); }
+      .col-8, .col-6, .col-4, .col-12 { grid-column: span 4; }
+      nav ul { flex-direction: column; width: 100%; }
     }
 
-    /* Breakpoint 2: Mobile (480px - 767px) */
     @media (min-width: 480px) and (max-width: 767px) {
-      main {
-        grid-template-columns: repeat(4, 1fr);
-        gap: var(--space-sm);
-      }
-      form {
-        grid-column: span 4;
-        display: flex;
-        flex-direction: column;
-      }
-      .fieldset-pessoais, .fieldset-endereco {
-        grid-column: span 4;
-      }
+      main, #app { grid-template-columns: repeat(4, 1fr); gap: var(--space-sm); }
+      .col-8, .col-6, .col-4, .col-12 { grid-column: span 4; }
     }
 
-    /* Breakpoint 3: Tablet (768px - 1023px) */
     @media (min-width: 768px) and (max-width: 1023px) {
-      main {
-        grid-template-columns: repeat(8, 1fr);
-        gap: var(--space-md);
-      }
-      form {
-        grid-column: span 8;
-        display: flex;
-        flex-direction: column;
-      }
-      .fieldset-pessoais, .fieldset-endereco {
-        grid-column: span 8;
-      }
+      main, #app { grid-template-columns: repeat(8, 1fr); gap: var(--space-md); }
+      .col-8, .col-6, .col-4, .col-12 { grid-column: span 8; }
     }
 
-    /* Breakpoint 4: Desktop Padrão (1024px - 1439px) */
     @media (min-width: 1024px) and (max-width: 1439px) {
-      main {
-        grid-template-columns: repeat(12, 1fr);
-      }
-      form {
-        grid-column: span 12;
-      }
-      .fieldset-pessoais, .fieldset-endereco {
-        grid-column: span 6;
-      }
+      main, #app { grid-template-columns: repeat(12, 1fr); }
+      .col-8 { grid-column: span 8; }
+      .col-6 { grid-column: span 6; }
+      .col-4 { grid-column: span 4; }
+      .col-12 { grid-column: span 12; }
     }
 
-    /* Breakpoint 5: Ultra-Wide (>= 1440px) */
     @media (min-width: 1440px) {
-      main {
-        max-width: 1400px;
-        gap: var(--space-lg);
-      }
-      form {
-        grid-column: span 12;
-      }
-      .fieldset-pessoais, .fieldset-endereco {
-        grid-column: span 6;
-      }
+      main { max-width: 1400px; gap: var(--space-lg); }
     }
   </style>
 </head>
@@ -362,70 +390,18 @@
     <h1>Faça seu Cadastro</h1>
     <nav>
       <ul>
-        <li><a href="index.html">Início</a></li>
-        <li><a href="projetos.html">Projetos</a></li>
-        <li><a href="cadastro.html">Cadastro</a></li>
+        <li><a data-route="inicio">Início</a></li>
+        <li><a data-route="projetos">Projetos</a></li>
+        <li><a data-route="cadastro" class="active">Cadastro</a></li>
       </ul>
     </nav>
   </header>
 
-  <!-- CONTEÚDO PRINCIPAL (GRID 12 COLUNAS) -->
+  <!-- CONTEÚDO PRINCIPAL (CONTAINER DINÂMICO SPA) -->
   <main>
-    <form action="#" method="POST" onsubmit="event.preventDefault();">
-      
-      <!-- COLUNA DA ESQUERDA: DADOS PESSOAIS -->
-      <fieldset class="fieldset-pessoais">
-        <legend>Dados Pessoais</legend>
-        
-        <div class="form-group">
-          <label for="nome">Nome Completo:</label>
-          <input type="text" id="nome" name="nome" placeholder="Digite seu nome completo" required>
-        </div>
-
-        <div class="form-group">
-          <label for="email">E-mail:</label>
-          <input type="email" id="email" name="email" placeholder="seuemail@exemplo.com" required>
-        </div>
-
-        <div class="form-group">
-          <label for="cpf">CPF:</label>
-          <input type="text" id="cpf" name="cpf" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" placeholder="000.000.000-00" required>
-        </div>
-
-        <div class="form-group">
-          <label for="telefone">Telefone:</label>
-          <input type="tel" id="telefone" name="telefone" pattern="\(\d{2}\)\s?\d{4,5}-\d{4}" placeholder="(11) 99999-9999" required>
-        </div>
-
-        <div class="form-group">
-          <label for="nascimento">Data de Nascimento:</label>
-          <input type="date" id="nascimento" name="nascimento" required>
-        </div>
-      </fieldset>
-
-      <!-- COLUNA DA DIREITA: ENDEREÇO -->
-      <fieldset class="fieldset-endereco">
-        <legend>Endereço</legend>
-
-        <div class="form-group">
-          <label for="cep">CEP:</label>
-          <input type="text" id="cep" name="cep" pattern="\d{5}-\d{3}" placeholder="00000-000" required>
-        </div>
-
-        <div class="form-group">
-          <label for="endereco">Endereço:</label>
-          <input type="text" id="endereco" name="endereco" placeholder="Rua, Número, Bairro" required>
-        </div>
-
-        <div class="form-group">
-          <label for="cidade">Cidade / Estado:</label>
-          <input type="text" id="cidade" name="cidade" placeholder="São Paulo / SP" required>
-        </div>
-      </fieldset>
-
-      <!-- BOTÃO DE ENVIO (LARGURA TOTAL) -->
-      <button type="submit">Enviar Cadastro</button>
-    </form>
+    <div id="app">
+      <!-- Conteúdo renderizado dinamicamente via JavaScript -->
+    </div>
   </main>
 
   <!-- RODAPÉ -->
@@ -433,5 +409,269 @@
     <p>&copy; 2026 ONG Esperança - Todos os direitos reservados.</p>
   </footer>
 
+  <!-- BIBLIOTECA EXTERNA IMASK (MÁSCARAS DE INPUT) -->
+  <script src="https://unpkg.com/imask"></script>
+
+  <!-- LÓGICA JAVASCRIPT REATIVA E MODULAR -->
+  <script>
+    /* ==========================================================================
+       PERSISTÊNCIA E DADOS (LOCALSTORAGE)
+       ========================================================================== */
+    const STORAGE_KEY = 'ong_cadastros_voluntarios';
+
+    function salvarCadastro(dados) {
+      const cadastros = carregarCadastros();
+      cadastros.push(dados);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(cadastros));
+    }
+
+    function carregarCadastros() {
+      const dados = localStorage.getItem(STORAGE_KEY);
+      try {
+        return dados ? JSON.parse(dados) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    /* ==========================================================================
+       ROTAS E TEMPLATES DA SPA
+       ========================================================================== */
+    const routes = {
+      inicio: `
+        <section id="apresentacao" class="col-8">
+          <div>
+            <span class="badge badge-success">Projeto Ativo</span>
+            <h2>Sobre a Nossa Organização</h2>
+            <p>Trabalhamos promovendo a inclusão social e o desenvolvimento comunitário através de ações humanitárias e educação inclusiva.</p>
+            <h3>Nossa Missão</h3>
+            <p>Garantir oportunidades e dignidade para famílias em situação de vulnerabilidade social.</p>
+          </div>
+          <img src="assets/images/logo.png" alt="Voluntários da ONG reunidos">
+        </section>
+
+        <section id="contato" class="col-4">
+          <div>
+            <h2>Contato</h2>
+            <div class="alert alert-success">
+              Atendimento presencial de segunda a sexta, das 8h às 17h.
+            </div>
+            <p><strong>E-mail:</strong> contato@ongesperanca.org.br</p>
+            <p><strong>Telefone:</strong> (11) 99999-9999</p>
+
+            <h3>Inscreva-se na nossa Newsletter</h3>
+            <form id="form-newsletter">
+              <div class="form-group">
+                <label for="email-news">Seu E-mail:</label>
+                <input type="email" id="email-news" class="form-control" placeholder="seuemail@exemplo.com" required>
+              </div>
+              <button type="submit" class="btn">Cadastrar</button>
+            </form>
+          </div>
+        </section>
+      `,
+      projetos: `
+        <section id="doacao" class="col-6">
+          <div>
+            <span class="badge badge-success">Impacto Imediato</span>
+            <h2>Apoie com uma Doação</h2>
+            <p>Sua contribuição financeira mantém nossos projetos ativos e transforma vidas diretamente em nossa comunidade.</p>
+          </div>
+          <a class="btn-action" onclick="mostrarToast('Redirecionando para plataforma de doação...')">Fazer Doação</a>
+        </section>
+
+        <section id="voluntariado" class="col-6">
+          <div>
+            <span class="badge badge-info">Engajamento Social</span>
+            <h2>Seja um Voluntário</h2>
+            <p>Doe seu tempo e habilidades para impactar nossa comunidade nas seguintes frentes:</p>
+            <ul>
+              <li>Apoio pedagógico e reforço escolar</li>
+              <li>Organização de eventos comunitários</li>
+              <li>Atendimento e triagem comunitária</li>
+            </ul>
+          </div>
+          <a data-route="cadastro" class="btn-action btn-secondary">Inscreva-se como Voluntário</a>
+        </section>
+      `,
+      cadastro: `
+        <section class="col-12">
+          <h2>Faça seu Cadastro</h2>
+          <form id="form-cadastro" class="form-grid">
+            <fieldset class="col-6">
+              <legend>Dados Pessoais</legend>
+              <div class="form-group">
+                <label for="nome">Nome Completo:</label>
+                <input type="text" id="nome" name="nome" class="form-control" placeholder="Digite seu nome completo" required>
+              </div>
+              <div class="form-group">
+                <label for="email">E-mail:</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="seuemail@exemplo.com" required>
+              </div>
+              <div class="form-group">
+                <label for="cpf">CPF:</label>
+                <input type="text" id="cpf" name="cpf" class="form-control" placeholder="000.000.000-00" required>
+              </div>
+              <div class="form-group">
+                <label for="telefone">Telefone:</label>
+                <input type="tel" id="telefone" name="telefone" class="form-control" placeholder="(11) 99999-9999" required>
+              </div>
+            </fieldset>
+
+            <fieldset class="col-6">
+              <legend>Endereço</legend>
+              <div class="form-group">
+                <label for="cep">CEP:</label>
+                <input type="text" id="cep" name="cep" class="form-control" placeholder="00000-000" required>
+              </div>
+              <div class="form-group">
+                <label for="endereco">Endereço:</label>
+                <input type="text" id="endereco" name="endereco" class="form-control" placeholder="Rua, Número, Bairro" required>
+              </div>
+              <div class="form-group">
+                <label for="cidade">Cidade / Estado:</label>
+                <input type="text" id="cidade" name="cidade" class="form-control" placeholder="São Paulo / SP" required>
+              </div>
+            </fieldset>
+
+            <button type="submit" class="btn col-12" style="margin-top: 1rem;">Enviar Cadastro</button>
+          </form>
+        </section>
+      `
+    };
+
+    /* ==========================================================================
+       ROTEAMENTO E RENDERIZAÇÃO SPA
+       ========================================================================== */
+    function navigateTo(route) {
+      const container = document.getElementById('app');
+      if (!container) return;
+
+      container.innerHTML = routes[route] || routes['cadastro'];
+
+      document.querySelectorAll('nav a').forEach(a => {
+        a.classList.toggle('active', a.getAttribute('data-route') === route);
+      });
+
+      if (route === 'cadastro') {
+        aplicarMascaras();
+      }
+    }
+
+    /* ==========================================================================
+       VALIDAÇÃO DE FORMULÁRIOS E FEEDBACK VISUAL
+       ========================================================================== */
+    const REGEX_PATTERNS = {
+      cpf: /^\d{3}\.\d{3}\.\d{3}-\d{2}$/,
+      telefone: /^\(\d{2}\)\s?\d{4,5}-\d{4}$/,
+      email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      cep: /^\d{5}-\d{3}$/
+    };
+
+    function validarCampo(input) {
+      const container = input.parentElement;
+      let mensagemErro = '';
+      let isValid = true;
+
+      if (input.hasAttribute('required') && !input.value.trim()) {
+        isValid = false;
+        mensagemErro = 'Este campo é obrigatório.';
+      } else if (input.id in REGEX_PATTERNS && input.value.trim() !== '') {
+        if (!REGEX_PATTERNS[input.id].test(input.value.trim())) {
+          isValid = false;
+          mensagemErro = 'Formato inválido inserido.';
+        }
+      }
+
+      input.classList.toggle('is-valid', isValid);
+      input.classList.toggle('is-invalid', !isValid);
+
+      const erroExistente = container.querySelector('.error-message');
+      if (erroExistente) erroExistente.remove();
+
+      if (!isValid) {
+        const span = document.createElement('span');
+        span.className = 'error-message';
+        span.textContent = mensagemErro;
+        container.appendChild(span);
+      }
+
+      return isValid;
+    }
+
+    function mostrarToast(mensagem) {
+      const toastExistente = document.querySelector('.toast');
+      if (toastExistente) toastExistente.remove();
+
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = mensagem;
+      document.body.appendChild(toast);
+
+      setTimeout(() => toast.remove(), 3500);
+    }
+
+    function aplicarMascaras() {
+      if (typeof IMask === 'undefined') return;
+      const cpf = document.getElementById('cpf');
+      const tel = document.getElementById('telefone');
+      const cep = document.getElementById('cep');
+
+      if (cpf) IMask(cpf, { mask: '000.000.000-00' });
+      if (tel) IMask(tel, { mask: [{ mask: '(00) 0000-0000' }, { mask: '(00) 00000-0000' }] });
+      if (cep) IMask(cep, { mask: '00000-000' });
+    }
+
+    /* ==========================================================================
+       DELEGAÇÃO DE EVENTOS (EVENT DELEGATION)
+       ========================================================================== */
+    document.addEventListener('click', (e) => {
+      const link = e.target.closest('[data-route]');
+      if (link) {
+        e.preventDefault();
+        const route = link.getAttribute('data-route');
+        navigateTo(route);
+      }
+    });
+
+    document.addEventListener('input', (e) => {
+      if (e.target.classList.contains('form-control')) {
+        validarCampo(e.target);
+      }
+    });
+
+    document.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      if (e.target.id === 'form-cadastro') {
+        const inputs = e.target.querySelectorAll('.form-control');
+        let formValido = true;
+
+        inputs.forEach(input => {
+          if (!validarCampo(input)) formValido = false;
+        });
+
+        if (formValido) {
+          const formData = new FormData(e.target);
+          salvarCadastro(Object.fromEntries(formData.entries()));
+          mostrarToast('Cadastro realizado e salvo com sucesso!');
+          e.target.reset();
+          inputs.forEach(i => i.classList.remove('is-valid'));
+        } else {
+          mostrarToast('Por favor, corrija os erros no formulário.');
+        }
+      }
+
+      if (e.target.id === 'form-newsletter') {
+        mostrarToast('E-mail cadastrado na newsletter com sucesso!');
+        e.target.reset();
+      }
+    });
+
+    // Inicializa a página na rota de cadastro
+    document.addEventListener('DOMContentLoaded', () => {
+      navigateTo('cadastro');
+    });
+  </script>
 </body>
 </html>
