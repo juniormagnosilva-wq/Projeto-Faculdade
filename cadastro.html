@@ -6,10 +6,10 @@
   <title>ONG Esperança - Cadastro</title>
   <style>
     /* ==========================================================================
-       1. ARQUITETURA DO DESIGN SYSTEM (VARIÁVEIS NATIVAS)
+       1. ARQUITETURA DO DESIGN SYSTEM (VARIÁVEIS NATIVAS E DARK MODE)
        ========================================================================== */
     :root {
-      /* Paleta de Cores (8 Cores Distintas) */
+      /* Paleta de Cores (Modo Claro) */
       --color-primary: #1E3A8A;        /* Azul Escuro (Institucional) */
       --color-primary-hover: #1D4ED8;  /* Azul Vibrante (Interação) */
       --color-secondary: #0D9488;      /* Verde Esmeralda (Ação Social) */
@@ -48,6 +48,25 @@
       --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
+    /* MODO ESCURO / ALTO CONTRASTE (WCAG AAA) */
+    body.dark-mode {
+      --color-primary: #3B82F6;
+      --color-primary-hover: #60A5FA;
+      --color-secondary: #14B8A6;
+      --color-secondary-hover: #2DD4BF;
+      --color-neutral-dark: #F9FAFB;
+      --color-neutral-medium: #D1D5DB;
+      --color-neutral-light: #121212;
+      --color-neutral-white: #1F2937;
+
+      --color-success-bg: #064E3B;
+      --color-success-text: #A7F3D0;
+      --color-info-bg: #1E3A8A;
+      --color-info-text: #BFDBFE;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.5);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.7);
+    }
+
     /* Reset Global */
     * {
       margin: 0;
@@ -64,6 +83,7 @@
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+      transition: var(--transition-normal);
     }
 
     /* ==========================================================================
@@ -71,7 +91,7 @@
        ========================================================================== */
     header {
       background-color: var(--color-primary);
-      color: var(--color-neutral-white);
+      color: #FFFFFF;
       padding: var(--space-md) var(--space-lg);
       display: flex;
       flex-direction: column;
@@ -80,10 +100,34 @@
       box-shadow: var(--shadow-md);
     }
 
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      max-width: 1200px;
+    }
+
     header h1 {
       font-size: var(--font-size-h1);
       font-weight: 700;
       letter-spacing: -0.5px;
+    }
+
+    .btn-toggle-theme {
+      background: transparent;
+      border: 2px solid #FFFFFF;
+      color: #FFFFFF;
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: var(--font-size-small);
+      font-weight: 600;
+      transition: var(--transition-fast);
+    }
+
+    .btn-toggle-theme:hover {
+      background-color: rgba(255, 255, 255, 0.2);
     }
 
     nav ul {
@@ -95,7 +139,7 @@
     }
 
     nav a {
-      color: var(--color-neutral-white);
+      color: #FFFFFF;
       text-decoration: none;
       font-size: var(--font-size-body);
       font-weight: 600;
@@ -111,7 +155,7 @@
       transform: translateY(-2px);
     }
 
-    nav a:focus-visible {
+    nav a:focus-visible, .btn-toggle-theme:focus-visible {
       outline: 3px solid var(--color-secondary);
       outline-offset: 2px;
     }
@@ -143,12 +187,18 @@
     .col-4 { grid-column: span 4; }
     .col-12 { grid-column: span 12; }
 
+    /* Mapeamento de Colunas do Endereço Lado a Lado (Sub-grid Desktop) */
+    .col-cep { grid-column: span 3; }
+    .col-endereco { grid-column: span 5; }
+    .col-cidade { grid-column: span 4; }
+    .col-full { grid-column: span 12; }
+
     section {
       background: var(--color-neutral-white);
       padding: var(--space-lg);
       border-radius: 12px;
       box-shadow: var(--shadow-sm);
-      border: 1px solid rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0, 0, 0, 0.08);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -159,7 +209,7 @@
       box-shadow: var(--shadow-md);
     }
 
-    section h2 {
+    h2 {
       color: var(--color-primary);
       font-size: var(--font-size-h2);
       margin-bottom: var(--space-sm);
@@ -167,29 +217,17 @@
       padding-bottom: var(--space-xs);
     }
 
-    section h3 {
+    h3 {
       font-size: var(--font-size-h3);
       color: var(--color-neutral-dark);
       margin-top: var(--space-sm);
       margin-bottom: var(--space-xs);
     }
 
-    section p {
+    p {
       color: var(--color-neutral-medium);
       font-size: var(--font-size-body);
       margin-bottom: var(--space-sm);
-    }
-
-    section ul {
-      margin-bottom: var(--space-md);
-      padding-left: var(--space-md);
-      list-style-type: square;
-    }
-
-    section ul li {
-      margin-bottom: var(--space-xs);
-      color: var(--color-neutral-dark);
-      font-size: var(--font-size-body);
     }
 
     section img {
@@ -203,7 +241,7 @@
     }
 
     /* ==========================================================================
-       4. COMPONENTES DE FEEDBACK, FORMULÁRIOS E ESTADOS INTERATIVOS
+       4. COMPONENTES E FORMULÁRIOS
        ========================================================================== */
     .badge {
       display: inline-block;
@@ -250,28 +288,27 @@
       border: 2px solid var(--color-neutral-medium);
       border-radius: 6px;
       font-size: var(--font-size-body);
+      background-color: var(--color-neutral-white);
+      color: var(--color-neutral-dark);
       outline: none;
       transition: var(--transition-fast);
     }
 
     .form-control:focus {
-      border-color: var(--color-primary-hover);
-      box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.2);
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
     }
 
-    /* Feedback de Erro e Sucesso via JavaScript */
     .form-control.is-valid {
       border-color: var(--color-secondary);
-      background-color: rgba(209, 250, 229, 0.1);
     }
 
     .form-control.is-invalid {
-      border-color: #DC2626;
-      background-color: rgba(254, 226, 226, 0.1);
+      border-color: #EF4444;
     }
 
     .error-message {
-      color: #DC2626;
+      color: #EF4444;
       font-size: 0.85rem;
       margin-top: -0.25rem;
       margin-bottom: 0.5rem;
@@ -280,11 +317,11 @@
 
     .btn, section a.btn-action {
       background-color: var(--color-primary);
-      color: var(--color-neutral-white);
+      color: #FFFFFF;
       padding: 0.75rem 1.25rem;
       font-size: var(--font-size-body);
       font-weight: 700;
-      border: 2px solid transparent;
+      border: none;
       border-radius: 6px;
       cursor: pointer;
       transition: var(--transition-fast);
@@ -305,7 +342,6 @@
     .btn-secondary, section a.btn-secondary { background-color: var(--color-secondary); }
     .btn-secondary:hover, section a.btn-secondary:hover { background-color: var(--color-secondary-hover); }
 
-    /* Notificação Toast */
     .toast {
       position: fixed;
       bottom: 20px;
@@ -319,7 +355,6 @@
       transition: var(--transition-normal);
     }
 
-    /* Grid do Formulário de Cadastro em 2 colunas */
     .form-grid {
       display: grid;
       grid-template-columns: repeat(12, 1fr);
@@ -327,7 +362,7 @@
     }
 
     fieldset {
-      border: 2px solid var(--color-neutral-light);
+      border: 2px solid var(--color-neutral-medium);
       padding: var(--space-md);
       border-radius: 8px;
     }
@@ -356,18 +391,21 @@
        ========================================================================== */
     @media (max-width: 479px) {
       main, #app { grid-template-columns: repeat(4, 1fr); gap: var(--space-xs); }
-      .col-8, .col-6, .col-4, .col-12 { grid-column: span 4; }
+      .col-8, .col-6, .col-4, .col-12, .col-cep, .col-endereco, .col-cidade { grid-column: span 4; }
       nav ul { flex-direction: column; width: 100%; }
     }
 
     @media (min-width: 480px) and (max-width: 767px) {
       main, #app { grid-template-columns: repeat(4, 1fr); gap: var(--space-sm); }
-      .col-8, .col-6, .col-4, .col-12 { grid-column: span 4; }
+      .col-8, .col-6, .col-4, .col-12, .col-cep, .col-endereco, .col-cidade { grid-column: span 4; }
     }
 
     @media (min-width: 768px) and (max-width: 1023px) {
       main, #app { grid-template-columns: repeat(8, 1fr); gap: var(--space-md); }
       .col-8, .col-6, .col-4, .col-12 { grid-column: span 8; }
+      .col-cep { grid-column: span 3; }
+      .col-endereco { grid-column: span 5; }
+      .col-cidade { grid-column: span 8; }
     }
 
     @media (min-width: 1024px) and (max-width: 1439px) {
@@ -376,6 +414,9 @@
       .col-6 { grid-column: span 6; }
       .col-4 { grid-column: span 4; }
       .col-12 { grid-column: span 12; }
+      .col-cep { grid-column: span 3; }
+      .col-endereco { grid-column: span 5; }
+      .col-cidade { grid-column: span 4; }
     }
 
     @media (min-width: 1440px) {
@@ -385,20 +426,25 @@
 </head>
 <body>
 
-  <!-- CABEÇALHO E NAVEGAÇÃO -->
+  <!-- CABEÇALHO E NAVEGAÇÃO COM MODO ESCURO -->
   <header>
-    <h1>Faça seu Cadastro</h1>
-    <nav>
+    <div class="header-top">
+      <h1>ONG Esperança</h1>
+      <button id="theme-toggle" class="btn-toggle-theme" aria-label="Alternar modo escuro e claro">
+        🌙 Modo Escuro
+      </button>
+    </div>
+    <nav aria-label="Navegação Principal">
       <ul>
-        <li><a data-route="inicio">Início</a></li>
-        <li><a data-route="projetos">Projetos</a></li>
-        <li><a data-route="cadastro" class="active">Cadastro</a></li>
+        <li><a data-route="inicio" href="#inicio">Início</a></li>
+        <li><a data-route="projetos" href="#projetos">Projetos</a></li>
+        <li><a data-route="cadastro" class="active" href="#cadastro">Cadastro</a></li>
       </ul>
     </nav>
   </header>
 
   <!-- CONTEÚDO PRINCIPAL (CONTAINER DINÂMICO SPA) -->
-  <main>
+  <main id="main-content">
     <div id="app">
       <!-- Conteúdo renderizado dinamicamente via JavaScript -->
     </div>
@@ -415,7 +461,7 @@
   <!-- LÓGICA JAVASCRIPT REATIVA E MODULAR -->
   <script>
     /* ==========================================================================
-       PERSISTÊNCIA E DADOS (LOCALSTORAGE)
+       1. PERSISTÊNCIA E DADOS (LOCALSTORAGE)
        ========================================================================== */
     const STORAGE_KEY = 'ong_cadastros_voluntarios';
 
@@ -435,7 +481,7 @@
     }
 
     /* ==========================================================================
-       ROTAS E TEMPLATES DA SPA
+       2. ROTAS E TEMPLATES DA SPA
        ========================================================================== */
     const routes = {
       inicio: `
@@ -447,13 +493,13 @@
             <h3>Nossa Missão</h3>
             <p>Garantir oportunidades e dignidade para famílias em situação de vulnerabilidade social.</p>
           </div>
-          <img src="assets/images/logo.png" alt="Voluntários da ONG reunidos">
+          <img src="assets/images/logo.png" alt="Voluntários da ONG reunidos" loading="lazy">
         </section>
 
         <section id="contato" class="col-4">
           <div>
             <h2>Contato</h2>
-            <div class="alert alert-success">
+            <div class="alert alert-success" role="status">
               Atendimento presencial de segunda a sexta, das 8h às 17h.
             </div>
             <p><strong>E-mail:</strong> contato@ongesperanca.org.br</p>
@@ -485,7 +531,7 @@
             <span class="badge badge-info">Engajamento Social</span>
             <h2>Seja um Voluntário</h2>
             <p>Doe seu tempo e habilidades para impactar nossa comunidade nas seguintes frentes:</p>
-            <ul>
+            <ul style="margin-bottom: 1rem; padding-left: 1.2rem;">
               <li>Apoio pedagógico e reforço escolar</li>
               <li>Organização de eventos comunitários</li>
               <li>Atendimento e triagem comunitária</li>
@@ -496,41 +542,45 @@
       `,
       cadastro: `
         <section class="col-12">
-          <h2>Faça seu Cadastro</h2>
+          <h2>Faça seu Cadastro de Voluntário</h2>
           <form id="form-cadastro" class="form-grid">
-            <fieldset class="col-6">
+            <fieldset class="col-12">
               <legend>Dados Pessoais</legend>
-              <div class="form-group">
-                <label for="nome">Nome Completo:</label>
-                <input type="text" id="nome" name="nome" class="form-control" placeholder="Digite seu nome completo" required>
-              </div>
-              <div class="form-group">
-                <label for="email">E-mail:</label>
-                <input type="email" id="email" name="email" class="form-control" placeholder="seuemail@exemplo.com" required>
-              </div>
-              <div class="form-group">
-                <label for="cpf">CPF:</label>
-                <input type="text" id="cpf" name="cpf" class="form-control" placeholder="000.000.000-00" required>
-              </div>
-              <div class="form-group">
-                <label for="telefone">Telefone:</label>
-                <input type="tel" id="telefone" name="telefone" class="form-control" placeholder="(11) 99999-9999" required>
+              <div class="form-grid">
+                <div class="form-group col-full">
+                  <label for="nome">Nome Completo:</label>
+                  <input type="text" id="nome" name="nome" class="form-control" placeholder="Digite seu nome completo" required>
+                </div>
+                <div class="form-group col-full">
+                  <label for="email">E-mail:</label>
+                  <input type="email" id="email" name="email" class="form-control" placeholder="seuemail@exemplo.com" required>
+                </div>
+                <div class="form-group col-full">
+                  <label for="cpf">CPF:</label>
+                  <input type="text" id="cpf" name="cpf" class="form-control" placeholder="000.000.000-00" required>
+                </div>
+                <div class="form-group col-full">
+                  <label for="telefone">Telefone:</label>
+                  <input type="tel" id="telefone" name="telefone" class="form-control" placeholder="(11) 99999-9999" required>
+                </div>
               </div>
             </fieldset>
 
-            <fieldset class="col-6">
+            <fieldset class="col-12">
               <legend>Endereço</legend>
-              <div class="form-group">
-                <label for="cep">CEP:</label>
-                <input type="text" id="cep" name="cep" class="form-control" placeholder="00000-000" required>
-              </div>
-              <div class="form-group">
-                <label for="endereco">Endereço:</label>
-                <input type="text" id="endereco" name="endereco" class="form-control" placeholder="Rua, Número, Bairro" required>
-              </div>
-              <div class="form-group">
-                <label for="cidade">Cidade / Estado:</label>
-                <input type="text" id="cidade" name="cidade" class="form-control" placeholder="São Paulo / SP" required>
+              <div class="form-grid">
+                <div class="form-group col-cep">
+                  <label for="cep">CEP:</label>
+                  <input type="text" id="cep" name="cep" class="form-control" placeholder="00000-000" required>
+                </div>
+                <div class="form-group col-endereco">
+                  <label for="endereco">Endereço:</label>
+                  <input type="text" id="endereco" name="endereco" class="form-control" placeholder="Rua, Número, Bairro" required>
+                </div>
+                <div class="form-group col-cidade">
+                  <label for="cidade">Cidade / Estado:</label>
+                  <input type="text" id="cidade" name="cidade" class="form-control" placeholder="São Paulo / SP" required>
+                </div>
               </div>
             </fieldset>
 
@@ -541,7 +591,7 @@
     };
 
     /* ==========================================================================
-       ROTEAMENTO E RENDERIZAÇÃO SPA
+       3. ROTEAMENTO E RENDERIZAÇÃO SPA
        ========================================================================== */
     function navigateTo(route) {
       const container = document.getElementById('app');
@@ -559,7 +609,7 @@
     }
 
     /* ==========================================================================
-       VALIDAÇÃO DE FORMULÁRIOS E FEEDBACK VISUAL
+       4. VALIDAÇÃO DE FORMULÁRIOS E FEEDBACK VISUAL
        ========================================================================== */
     const REGEX_PATTERNS = {
       cpf: /^\d{3}\.\d{3}\.\d{3}-\d{2}$/,
@@ -605,6 +655,7 @@
 
       const toast = document.createElement('div');
       toast.className = 'toast';
+      toast.setAttribute('role', 'alert');
       toast.textContent = mensagem;
       document.body.appendChild(toast);
 
@@ -623,7 +674,27 @@
     }
 
     /* ==========================================================================
-       DELEGAÇÃO DE EVENTOS (EVENT DELEGATION)
+       5. MODALIDADE ESCURA (DARK MODE TOGGLE)
+       ========================================================================== */
+    function initTheme() {
+      const toggleBtn = document.getElementById('theme-toggle');
+      const isDark = localStorage.getItem('theme') === 'dark';
+
+      if (isDark) {
+        document.body.classList.add('dark-mode');
+        toggleBtn.textContent = '☀️ Modo Claro';
+      }
+
+      toggleBtn.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const darkModeActive = document.body.classList.contains('dark-mode');
+        localStorage.setItem('theme', darkModeActive ? 'dark' : 'light');
+        toggleBtn.textContent = darkModeActive ? '☀️ Modo Claro' : '🌙 Modo Escuro';
+      });
+    }
+
+    /* ==========================================================================
+       6. DELEGAÇÃO DE EVENTOS (EVENT DELEGATION)
        ========================================================================== */
     document.addEventListener('click', (e) => {
       const link = e.target.closest('[data-route]');
@@ -668,8 +739,9 @@
       }
     });
 
-    // Inicializa a página na rota de cadastro
+    // Inicializa o tema e navega para a rota de cadastro
     document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
       navigateTo('cadastro');
     });
   </script>

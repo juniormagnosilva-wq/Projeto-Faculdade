@@ -9,13 +9,13 @@
        1. ARQUITETURA DO DESIGN SYSTEM (VARIÁVEIS NATIVAS)
        ========================================================================== */
     :root {
-      /* Paleta de Cores (8 Cores Distintas) */
-      --color-primary: #1E3A8A;        /* Azul Escuro (Institucional) */
-      --color-primary-hover: #1D4ED8;  /* Azul Vibrante (Interação) */
-      --color-secondary: #0D9488;      /* Verde Esmeralda (Ação Social) */
-      --color-secondary-hover: #0F766E;/* Verde Escuro (Foco) */
-      --color-neutral-dark: #1F2937;   /* Texto Principal - Contraste WCAG AAA */
-      --color-neutral-medium: #4B5563; /* Subtítulos e Legendas */
+      /* Paleta de Cores (Modo Claro) */
+      --color-primary: #1E3A8A;        /* Azul Escuro */
+      --color-primary-hover: #1D4ED8;  /* Azul Vibrante */
+      --color-secondary: #0D9488;      /* Verde Esmeralda */
+      --color-secondary-hover: #0F766E;/* Verde Escuro */
+      --color-neutral-dark: #1F2937;   /* Texto Principal */
+      --color-neutral-medium: #4B5563; /* Subtítulos */
       --color-neutral-light: #F3F4F6;  /* Fundo da Página */
       --color-neutral-white: #FFFFFF;  /* Cards e Containers */
 
@@ -28,11 +28,11 @@
       --color-info-text: #1E40AF;
 
       /* Escala Tipográfica (5 Patamares Hierárquicos) */
-      --font-size-h1: 2.25rem;    /* 36px - Título Principal */
-      --font-size-h2: 1.75rem;    /* 28px - Títulos de Seções */
-      --font-size-h3: 1.25rem;    /* 20px - Subtítulos */
-      --font-size-body: 1rem;     /* 16px - Corpo de Texto */
-      --font-size-small: 0.875rem;/* 14px - Legendas e Rodapé */
+      --font-size-h1: 2.25rem;    /* 36px */
+      --font-size-h2: 1.75rem;    /* 28px */
+      --font-size-h3: 1.25rem;    /* 20px */
+      --font-size-body: 1rem;     /* 16px */
+      --font-size-small: 0.875rem;/* 14px */
 
       /* Espaçamento Modular (Base 8px) */
       --space-xs: 0.5rem;  /* 8px */
@@ -46,6 +46,25 @@
       --transition-normal: all 0.3s ease;
       --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
       --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    /* MODO ESCURO / ALTO CONTRASTE (WCAG AAA) */
+    body.dark-mode {
+      --color-primary: #3B82F6;
+      --color-primary-hover: #60A5FA;
+      --color-secondary: #14B8A6;
+      --color-secondary-hover: #2DD4BF;
+      --color-neutral-dark: #F9FAFB;
+      --color-neutral-medium: #D1D5DB;
+      --color-neutral-light: #121212;
+      --color-neutral-white: #1F2937;
+
+      --color-success-bg: #064E3B;
+      --color-success-text: #A7F3D0;
+      --color-info-bg: #1E3A8A;
+      --color-info-text: #BFDBFE;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.5);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.7);
     }
 
     /* Reset Global */
@@ -64,6 +83,7 @@
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+      transition: var(--transition-normal);
     }
 
     /* ==========================================================================
@@ -71,7 +91,7 @@
        ========================================================================== */
     header {
       background-color: var(--color-primary);
-      color: var(--color-neutral-white);
+      color: #FFFFFF;
       padding: var(--space-md) var(--space-lg);
       display: flex;
       flex-direction: column;
@@ -80,10 +100,34 @@
       box-shadow: var(--shadow-md);
     }
 
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      max-width: 1200px;
+    }
+
     header h1 {
       font-size: var(--font-size-h1);
       font-weight: 700;
       letter-spacing: -0.5px;
+    }
+
+    .btn-toggle-theme {
+      background: transparent;
+      border: 2px solid #FFFFFF;
+      color: #FFFFFF;
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: var(--font-size-small);
+      font-weight: 600;
+      transition: var(--transition-fast);
+    }
+
+    .btn-toggle-theme:hover {
+      background-color: rgba(255, 255, 255, 0.2);
     }
 
     nav ul {
@@ -95,7 +139,7 @@
     }
 
     nav a {
-      color: var(--color-neutral-white);
+      color: #FFFFFF;
       text-decoration: none;
       font-size: var(--font-size-body);
       font-weight: 600;
@@ -111,7 +155,7 @@
       transform: translateY(-2px);
     }
 
-    nav a:focus-visible {
+    nav a:focus-visible, .btn-toggle-theme:focus-visible {
       outline: 3px solid var(--color-secondary);
       outline-offset: 2px;
     }
@@ -143,23 +187,23 @@
     .col-4 { grid-column: span 4; }
     .col-12 { grid-column: span 12; }
 
-    section {
+    section, article {
       background: var(--color-neutral-white);
       padding: var(--space-lg);
       border-radius: 12px;
       box-shadow: var(--shadow-sm);
-      border: 1px solid rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0, 0, 0, 0.08);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       transition: var(--transition-normal);
     }
 
-    section:hover {
+    section:hover, article:hover {
       box-shadow: var(--shadow-md);
     }
 
-    section h2 {
+    h2 {
       color: var(--color-primary);
       font-size: var(--font-size-h2);
       margin-bottom: var(--space-sm);
@@ -167,14 +211,14 @@
       padding-bottom: var(--space-xs);
     }
 
-    section h3 {
+    h3 {
       font-size: var(--font-size-h3);
       color: var(--color-neutral-dark);
       margin-top: var(--space-sm);
       margin-bottom: var(--space-xs);
     }
 
-    section p {
+    p {
       color: var(--color-neutral-medium);
       font-size: var(--font-size-body);
       margin-bottom: var(--space-sm);
@@ -191,7 +235,7 @@
     }
 
     /* ==========================================================================
-       4. COMPONENTES DE FEEDBACK, FORMULÁRIOS E ESTADOS INTERATIVOS
+       4. COMPONENTES E FORMULÁRIOS
        ========================================================================== */
     .badge {
       display: inline-block;
@@ -238,28 +282,27 @@
       border: 2px solid var(--color-neutral-medium);
       border-radius: 6px;
       font-size: var(--font-size-body);
+      background-color: var(--color-neutral-white);
+      color: var(--color-neutral-dark);
       outline: none;
       transition: var(--transition-fast);
     }
 
     .form-control:focus {
-      border-color: var(--color-primary-hover);
-      box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.2);
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
     }
 
-    /* Feedback de Erro e Sucesso via JavaScript */
     .form-control.is-valid {
       border-color: var(--color-secondary);
-      background-color: rgba(209, 250, 229, 0.1);
     }
 
     .form-control.is-invalid {
-      border-color: #DC2626;
-      background-color: rgba(254, 226, 226, 0.1);
+      border-color: #EF4444;
     }
 
     .error-message {
-      color: #DC2626;
+      color: #EF4444;
       font-size: 0.85rem;
       margin-top: -0.25rem;
       margin-bottom: 0.5rem;
@@ -268,7 +311,7 @@
 
     .btn {
       background-color: var(--color-primary);
-      color: var(--color-neutral-white);
+      color: #FFFFFF;
       padding: 0.75rem 1.25rem;
       font-size: var(--font-size-body);
       font-weight: 700;
@@ -284,12 +327,10 @@
     .btn:hover { background-color: var(--color-primary-hover); box-shadow: var(--shadow-md); }
     .btn:active { transform: scale(0.98); }
     .btn:focus-visible { outline: 3px solid var(--color-secondary); outline-offset: 2px; }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
     .btn-secondary { background-color: var(--color-secondary); }
     .btn-secondary:hover { background-color: var(--color-secondary-hover); }
 
-    /* Notificação Toast */
     .toast {
       position: fixed;
       bottom: 20px;
@@ -300,10 +341,8 @@
       border-radius: 6px;
       box-shadow: var(--shadow-md);
       z-index: 1000;
-      transition: var(--transition-normal);
     }
 
-    /* Grid para formulário de cadastro em 2 colunas */
     .form-grid {
       display: grid;
       grid-template-columns: repeat(12, 1fr);
@@ -311,7 +350,7 @@
     }
 
     fieldset {
-      border: 2px solid var(--color-neutral-light);
+      border: 2px solid var(--color-neutral-medium);
       padding: var(--space-md);
       border-radius: 8px;
     }
@@ -369,22 +408,27 @@
 </head>
 <body>
 
-  <!-- CABEÇALHO E NAVEGAÇÃO -->
+  <!-- CABEÇALHO E NAVEGAÇÃO COM MODO ESCURO -->
   <header>
-    <h1>ONG Esperança</h1>
-    <nav>
+    <div class="header-top">
+      <h1>ONG Esperança</h1>
+      <button id="theme-toggle" class="btn-toggle-theme" aria-label="Alternar modo escuro e claro">
+        🌙 Modo Escuro
+      </button>
+    </div>
+    <nav aria-label="Navegação Principal">
       <ul>
-        <li><a data-route="inicio" class="active">Início</a></li>
-        <li><a data-route="projetos">Projetos</a></li>
-        <li><a data-route="cadastro">Cadastro</a></li>
+        <li><a data-route="inicio" class="active" href="#inicio">Início</a></li>
+        <li><a data-route="projetos" href="#projetos">Projetos</a></li>
+        <li><a data-route="cadastro" href="#cadastro">Cadastro</a></li>
       </ul>
     </nav>
   </header>
 
   <!-- CONTEÚDO PRINCIPAL (CONTAINER DINÂMICO SPA) -->
-  <main>
+  <main id="main-content">
     <div id="app">
-      <!-- O conteúdo será injetado dinamicamente via JavaScript -->
+      <!-- Injeção de conteúdo dinâmico via JS -->
     </div>
   </main>
 
@@ -393,14 +437,12 @@
     <p>&copy; 2026 ONG Esperança - Todos os direitos reservados.</p>
   </footer>
 
-  <!-- BIBLIOTECA EXTERNA IMASK (MÁSCARAS DE INPUT) -->
+  <!-- BIBLIOTECA EXTERNA DE MÁSCARAS -->
   <script src="https://unpkg.com/imask"></script>
 
-  <!-- LÓGICA JAVASCRIPT REATIVA E MODULAR -->
+  <!-- LÓGICA JAVASCRIPT -->
   <script>
-    /* ==========================================================================
-       PERSISTÊNCIA E DADOS (LOCALSTORAGE)
-       ========================================================================== */
+    /* 1. PERSISTÊNCIA LOCAL (LOCALSTORAGE) */
     const STORAGE_KEY = 'ong_cadastros_voluntarios';
 
     function salvarCadastro(dados) {
@@ -411,33 +453,52 @@
 
     function carregarCadastros() {
       const dados = localStorage.getItem(STORAGE_KEY);
-      try {
-        return dados ? JSON.parse(dados) : [];
-      } catch (e) {
-        return [];
-      }
+      try { return dados ? JSON.parse(dados) : []; } catch (e) { return []; }
     }
 
-    /* ==========================================================================
-       ROTAS E TEMPLATES DA SPA
-       ========================================================================== */
+    /* 2. DADOS DINÂMICOS DE PROJETOS */
+    const projetosData = [
+      {
+        titulo: "Reforço Escolar e Leitura",
+        categoria: "Educação",
+        badgeClass: "badge-success",
+        descricao: "Aulas presenciais para crianças do ensino fundamental em comunidades atendidas.",
+        linkText: "Apoiar Projeto"
+      },
+      {
+        titulo: "Arrecadação de Mantimentos",
+        categoria: "Ação Social",
+        badgeClass: "badge-info",
+        descricao: "Distribuição mensal de cestas básicas e itens essenciais para famílias cadastradas.",
+        linkText: "Doar Alimentos"
+      },
+      {
+        titulo: "Atendimento Comunitário",
+        categoria: "Cidadania",
+        badgeClass: "badge-success",
+        descricao: "Apoio e triagem social gratuita para encaminhamento a serviços públicos.",
+        linkText: "Saber Mais"
+      }
+    ];
+
+    /* 3. ROTAS E TEMPLATES DA SPA */
     const routes = {
       inicio: `
         <section id="apresentacao" class="col-8">
           <div>
             <span class="badge badge-success">Projeto Ativo</span>
             <h2>Sobre a Nossa Organização</h2>
-            <p>Trabalhamos promovendo a inclusão social e o desenvolvimento comunitário através de ações humanitárias e educação inclusiva.</p>
+            <p>Promovemos a inclusão social e o desenvolvimento comunitário através de ações humanitárias e educação inclusiva.</p>
             <h3>Nossa Missão</h3>
             <p>Garantir oportunidades e dignidade para famílias em situação de vulnerabilidade social.</p>
           </div>
-          <img src="assets/images/logo.png" alt="Voluntários da ONG reunidos">
+          <img src="assets/images/logo.png" alt="Voluntários da ONG trabalhando em projeto comunitário" loading="lazy">
         </section>
 
         <section id="contato" class="col-4">
           <div>
             <h2>Contato</h2>
-            <div class="alert alert-success">
+            <div class="alert alert-success" role="status">
               Atendimento presencial de segunda a sexta, das 8h às 17h.
             </div>
             <p><strong>E-mail:</strong> contato@ongesperanca.org.br</p>
@@ -455,32 +516,26 @@
         </section>
       `,
       projetos: `
-        <section id="doacao" class="col-6">
-          <div>
-            <span class="badge badge-success">Impacto Imediato</span>
-            <h2>Apoie com uma Doação</h2>
-            <p>Sua contribuição financeira mantém nossos projetos ativos e transforma vidas diretamente em nossa comunidade.</p>
+        <div class="col-12" style="display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--space-md);">
+          <div class="col-12">
+            <h2>Nossos Projetos Sociais</h2>
+            <p>Conheça as iniciativas mantidas pela ONG Esperança e saiba como colaborar.</p>
           </div>
-          <a class="btn" onclick="mostrarToast('Redirecionando para plataforma de pagamento...')">Fazer Doação</a>
-        </section>
-
-        <section id="voluntariado" class="col-6">
-          <div>
-            <span class="badge badge-info">Engajamento Social</span>
-            <h2>Seja um Voluntário</h2>
-            <p>Doe seu tempo e habilidades para impactar nossa comunidade nas seguintes frentes:</p>
-            <ul style="margin-bottom: 1rem; padding-left: 1.2rem;">
-              <li>Apoio pedagógico e reforço escolar</li>
-              <li>Organização de eventos comunitários</li>
-              <li>Atendimento e triagem comunitária</li>
-            </ul>
-          </div>
-          <a data-route="cadastro" class="btn btn-secondary nav-link">Inscreva-se como Voluntário</a>
-        </section>
+          ${projetosData.map(p => `
+            <article class="col-4">
+              <div>
+                <span class="badge ${p.badgeClass}">${p.categoria}</span>
+                <h3>${p.titulo}</h3>
+                <p>${p.descricao}</p>
+              </div>
+              <button class="btn" onclick="mostrarToast('Obrigado pelo seu interesse!')">${p.linkText}</button>
+            </article>
+          `).join('')}
+        </div>
       `,
       cadastro: `
         <section class="col-12">
-          <h2>Faça seu Cadastro</h2>
+          <h2>Faça seu Cadastro de Voluntário</h2>
           <form id="form-cadastro" class="form-grid">
             <fieldset class="col-6">
               <legend>Dados Pessoais</legend>
@@ -524,29 +579,23 @@
       `
     };
 
-    /* ==========================================================================
-       ROTEAMENTO E RENDERIZAÇÃO SPA
-       ========================================================================== */
+    /* 4. ROTEAMENTO E RENDERIZAÇÃO */
     function navigateTo(route) {
       const container = document.getElementById('app');
       if (!container) return;
 
       container.innerHTML = routes[route] || routes['inicio'];
 
-      // Atualiza estado ativo no menu
       document.querySelectorAll('nav a').forEach(a => {
         a.classList.toggle('active', a.getAttribute('data-route') === route);
       });
 
-      // Aplica máscaras se for a página de cadastro
       if (route === 'cadastro') {
         aplicarMascaras();
       }
     }
 
-    /* ==========================================================================
-       VALIDAÇÃO DE FORMULÁRIOS E FEEDBACK VISUAL
-       ========================================================================== */
+    /* 5. VALIDAÇÃO E FEEDBACK VISUAL */
     const REGEX_PATTERNS = {
       cpf: /^\d{3}\.\d{3}\.\d{3}-\d{2}$/,
       telefone: /^\(\d{2}\)\s?\d{4,5}-\d{4}$/,
@@ -569,11 +618,9 @@
         }
       }
 
-      // Atualiza classes visuais
       input.classList.toggle('is-valid', isValid);
       input.classList.toggle('is-invalid', !isValid);
 
-      // Injeta/Remove mensagem de erro no DOM
       const erroExistente = container.querySelector('.error-message');
       if (erroExistente) erroExistente.remove();
 
@@ -593,6 +640,7 @@
 
       const toast = document.createElement('div');
       toast.className = 'toast';
+      toast.setAttribute('role', 'alert');
       toast.textContent = mensagem;
       document.body.appendChild(toast);
 
@@ -610,9 +658,25 @@
       if (cep) IMask(cep, { mask: '00000-000' });
     }
 
-    /* ==========================================================================
-       DELEGAÇÃO DE EVENTOS (EVENT DELEGATION)
-       ========================================================================== */
+    /* 6. MODALIDADE ESCURA (DARK MODE TOGGLE) */
+    function initTheme() {
+      const toggleBtn = document.getElementById('theme-toggle');
+      const isDark = localStorage.getItem('theme') === 'dark';
+
+      if (isDark) {
+        document.body.classList.add('dark-mode');
+        toggleBtn.textContent = '☀️ Modo Claro';
+      }
+
+      toggleBtn.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const darkModeActive = document.body.classList.contains('dark-mode');
+        localStorage.setItem('theme', darkModeActive ? 'dark' : 'light');
+        toggleBtn.textContent = darkModeActive ? '☀️ Modo Claro' : '🌙 Modo Escuro';
+      });
+    }
+
+    /* 7. EVENT DELEGATION */
     document.addEventListener('click', (e) => {
       const link = e.target.closest('[data-route]');
       if (link) {
@@ -630,7 +694,7 @@
 
     document.addEventListener('submit', (e) => {
       e.preventDefault();
-      
+
       if (e.target.id === 'form-cadastro') {
         const inputs = e.target.querySelectorAll('.form-control');
         let formValido = true;
@@ -651,13 +715,13 @@
       }
 
       if (e.target.id === 'form-newsletter') {
-        mostrarToast('E-mail cadastrado na newsletter com sucesso!');
+        mostrarToast('E-mail cadastrado com sucesso!');
         e.target.reset();
       }
     });
 
-    // Inicializa a SPA na rota inicial
     document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
       navigateTo('inicio');
     });
   </script>
